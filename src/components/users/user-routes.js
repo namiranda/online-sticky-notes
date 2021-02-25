@@ -1,21 +1,19 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 const User = require('./user-model');
 
 router.post(
   '/users/signup',
   [
-    body('username')
-      .isLength({ min: 4, max: 10 })
-      .withMessage('Username must be between 4 an 10 characters'),
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
       .trim()
       .isLength({ min: 4, max: 20 })
       .withMessage('Password must be between 4 and 20 characters'),
   ],
-  (req, res) => {
+  async (req, res) => {
     const errors = validationResult(req); //Extrae los errores
 
     if (!errors.isEmpty()) {
@@ -23,21 +21,37 @@ router.post(
       return res.status(400).send(errors.array()); //Return early y envia los errores
     }
 
-    const { username, email, password } = req.body;
-    const newUser = new User({
-      username: username,
-      email: email,
-      password: password,
-    });
+    const { email, password } = req.body;
 
-    User.create(newUser, (err, user) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.status(200).send(user);
+    const existingUser = await User.findOne({ email }); //Si existe un user con el mismo email, se lo asigna a existing user
+    //En caso contrario existing user va a ser null
+
+    if (existingUser) {
+      return res.send('Email in use');
+    }
+
+    const user = new User({ email: email, password: password });
+
+    user.save();
+
+    //Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_KEY,
+      {
+        expiresIn: '2h',
       }
-    });
-    console.log('Creating a user...');
+    );
+
+    //Store it on session object
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(201).send(user);
   }
 );
 
