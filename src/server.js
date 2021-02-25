@@ -1,11 +1,10 @@
 const express = require('express');
-const bodyPaser = require('body-parser');
 const mongoose = require('mongoose');
 const userRoutes = require('./components/users/user-routes');
 const app = express();
 
 require('dotenv').config();
-app.use(bodyPaser.json());
+app.use(express.json());
 
 //ROUTES
 app.use(userRoutes);
