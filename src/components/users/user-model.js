@@ -1,11 +1,20 @@
 const mongoose = require('mongoose');
 const Password = require('./utils/password');
 
-const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-});
+const userSchema = new mongoose.Schema(
+  {
+    username: String,
+    email: String,
+    password: String,
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+      },
+    },
+  }
+);
 
 userSchema.pre('save', async function (done) {
   if (this.isModified('password')) {
