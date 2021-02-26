@@ -1,11 +1,12 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+const Password = require('./utils/password');
 
 const User = require('./user-model');
 
 router.post(
-  '/users/signup',
+  '/api/users/signup',
   [
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
@@ -52,6 +53,55 @@ router.post(
     };
 
     res.status(201).send(user);
+  }
+);
+
+router.post(
+  '/api/users/signin',
+  [
+    body('email').isEmail().withMessage('Email must be valid'),
+    body('password')
+      .trim()
+      .notEmpty()
+      .withMessage('You must supply a password'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req); //Extrae los errores
+
+    if (!errors.isEmpty()) {
+      //Comprueba si existen errores
+      return res.status(400).send(errors.array()); //Return early y envia los errores
+    }
+
+    const { email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      return res.send('Invalid credentials');
+    }
+
+    const passwordMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+    if (!passwordMatch) {
+      return res.send('Invalid credentials');
+    }
+    //Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+      },
+      process.env.JWT_KEY
+    );
+
+    //Store it on session object
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(201).send(existingUser);
   }
 );
 

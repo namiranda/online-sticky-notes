@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const Password = require('./utils/password');
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -6,4 +7,11 @@ const userSchema = new mongoose.Schema({
   password: String,
 });
 
-module.exports = mongoose.model("User", userSchema);
+userSchema.pre('save', async function (done) {
+  if (this.isModified('password')) {
+    const hashed = await Password.toHash(this.get('password'));
+    this.set('password', hashed);
+  }
+});
+
+module.exports = mongoose.model('User', userSchema);
