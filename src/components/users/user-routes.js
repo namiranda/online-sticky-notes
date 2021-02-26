@@ -38,7 +38,7 @@ router.post(
     //Generate JWT
     const userJwt = jwt.sign(
       {
-        id: user.id,
+        id: user._id,
         email: user.email,
       },
       process.env.JWT_KEY,
@@ -48,9 +48,7 @@ router.post(
     );
 
     //Store it on session object
-    req.session = {
-      jwt: userJwt,
-    };
+    req.session.jwt = userJwt;
 
     res.status(201).send(user);
   }
@@ -90,7 +88,7 @@ router.post(
     //Generate JWT
     const userJwt = jwt.sign(
       {
-        id: existingUser.id,
+        id: existingUser._id,
         email: existingUser.email,
       },
       process.env.JWT_KEY
@@ -104,5 +102,11 @@ router.post(
     res.status(201).send(existingUser);
   }
 );
+
+router.post('/api/users/signout', (req, res) => {
+  req.session = null;
+
+  res.send({});
+});
 
 module.exports = router;

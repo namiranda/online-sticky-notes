@@ -1,10 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
 const userRoutes = require('./components/users/user-routes');
 const app = express();
 
 require('dotenv').config();
 app.use(express.json());
+app.use(
+  cookieSession({
+    signed: false,
+    // secure: true,
+  })
+);
 
 //ROUTES
 app.use(userRoutes);
