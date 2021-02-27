@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Password = require('./utils/password');
+const currentUser = require('../common/current-user');
 
 const User = require('./user-model');
 
@@ -109,17 +110,8 @@ router.post('/api/users/signout', (req, res) => {
   res.send({});
 });
 
-router.get('/api/users/currentuser', (req, res) => {
-  if (!req.session?.jwt) {
-    return res.send({ currentUser: null });
-  }
-
-  try {
-    const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY);
-    res.send({ currentUser: payload });
-  } catch (error) {
-    res.send({ currentUser: null });
-  }
+router.get('/api/users/currentuser', currentUser, (req, res) => {
+  res.send({ currentUser: req.currentUser || null });
 });
 
 module.exports = router;
