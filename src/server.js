@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
+const cors = require('cors');
 const userRoutes = require('./components/users/user-routes');
 const app = express();
 
 require('dotenv').config();
 app.use(express.json());
+app.use(cors());
 app.use(
   cookieSession({
     signed: false,
