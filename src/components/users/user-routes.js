@@ -3,6 +3,9 @@ const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Password = require('./utils/password');
 const currentUser = require('../common/current-user');
+const validateRequest = require('../../lib/middlewares/validate-request');
+const BadRequestError = require('../../lib/errors/bad-request-error');
+const errorHandler = require('../../lib/middlewares/error-handler');
 
 const User = require('./user-model');
 
@@ -15,21 +18,16 @@ router.post(
       .isLength({ min: 4, max: 20 })
       .withMessage('Password must be between 4 and 20 characters'),
   ],
+  errorHandler,
+  validateRequest,
   async (req, res) => {
-    const errors = validationResult(req); //Extrae los errores
-
-    if (!errors.isEmpty()) {
-      //Comprueba si existen errores
-      return res.status(400).send(errors.array()); //Return early y envia los errores
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email }); //Si existe un user con el mismo email, se lo asigna a existing user
     //En caso contrario existing user va a ser null
 
     if (existingUser) {
-      return res.send('Email in use');
+      throw new BadRequestError('Email in use');
     }
 
     const user = new User({ email: email, password: password });
