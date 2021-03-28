@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Password = require('./utils/password');
 const currentUser = require('../common/current-user');
@@ -8,6 +8,7 @@ const BadRequestError = require('../../lib/errors/bad-request-error');
 const errorHandler = require('../../lib/middlewares/error-handler');
 
 const User = require('./user-model');
+const CustomError = require('../../lib/errors/custom-error');
 
 router.post(
   '/api/users/signup',
@@ -62,19 +63,13 @@ router.post(
       .notEmpty()
       .withMessage('You must supply a password'),
   ],
+  validateRequest,
   async (req, res) => {
-    const errors = validationResult(req); //Extrae los errores
-
-    if (!errors.isEmpty()) {
-      //Comprueba si existen errores
-      return res.status(400).send(errors.array()); //Return early y envia los errores
-    }
-
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      return res.send('Invalid credentials');
+      throw new BadRequestError('Email in use');
     }
 
     const passwordMatch = await Password.compare(
