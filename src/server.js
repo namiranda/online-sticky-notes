@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
 const userRoutes = require('./components/users/user-routes');
+const handleErrors = require('./middlewares/error-handler');
+
 const app = express();
 
 require('dotenv').config();
@@ -17,6 +19,7 @@ app.use(
 
 //ROUTES
 app.use(userRoutes);
+app.use(handleErrors);
 
 const start = async () => {
   try {
