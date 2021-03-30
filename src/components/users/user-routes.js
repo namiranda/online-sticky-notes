@@ -7,7 +7,6 @@ const { BadRequest } = require('../../utils/errors');
 const validateRequest = require('../../middlewares/validate-request');
 
 const User = require('./user-model');
-const CustomError = require('../../lib/errors/custom-error');
 
 router.post(
   '/api/users/signup',
