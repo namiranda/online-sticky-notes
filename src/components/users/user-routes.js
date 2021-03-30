@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const Password = require('./utils/password');
 const currentUser = require('../common/current-user');
@@ -7,6 +7,7 @@ const { BadRequest } = require('../../utils/errors');
 const validateRequest = require('../../middlewares/validate-request');
 
 const User = require('./user-model');
+const CustomError = require('../../lib/errors/custom-error');
 
 router.post(
   '/api/users/signup',

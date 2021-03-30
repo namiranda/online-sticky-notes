@@ -1,3 +1,4 @@
-const start = require('./server');
+const app = require('./app');
+const mongoose = require('mongoose');
 
 start();
