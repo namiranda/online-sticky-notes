@@ -5,7 +5,7 @@ class GeneralError extends Error {
   }
 
   getCode() {
-    if (this instanceof BadRequest) {
+    if (this instanceof BadRequest || this instanceof RequestValidationError) {
       return 400;
     }
     if (this instanceof NotFound) {
