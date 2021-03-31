@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const currentUser = (req, res, next) => {
-  if (!req.session?.jwt) {
+  if (!req.session || !req.session.jwt) {
     return next();
   }
 
