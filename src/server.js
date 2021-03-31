@@ -38,4 +38,7 @@ const start = async () => {
   });
 };
 
-module.exports = start;
+module.exports = {
+  app,
+  start,
+};
