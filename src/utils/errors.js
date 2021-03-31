@@ -3,19 +3,20 @@ class GeneralError extends Error {
     super();
     this.message = message;
   }
+}
 
-  getCode() {
-    if (this instanceof BadRequest || this instanceof RequestValidationError) {
-      return 400;
-    }
-    if (this instanceof NotFound) {
-      return 404;
-    }
-    return 500;
+class BadRequest extends GeneralError {
+  statusCode = 400;
+
+  constructor(message) {
+    super(message);
+  }
+
+  serializeErrors() {
+    return [{ message: this.message }];
   }
 }
 
-class BadRequest extends GeneralError {}
 class NotFound extends GeneralError {}
 class RequestValidationError extends GeneralError {
   statusCode = 400;
@@ -23,7 +24,6 @@ class RequestValidationError extends GeneralError {
   constructor(errors) {
     super('Invalid request parameters');
     this.errors = errors;
-    this.serializeErrors();
   }
 
   serializeErrors() {
