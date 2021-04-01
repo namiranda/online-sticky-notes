@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
 const userRoutes = require('./routes/user-routes');
+const workspaceRoutes = require('./routes/workspace-routes');
 const handleErrors = require('./middlewares/error-handler');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(
 //ROUTES
 app.use(userRoutes);
 app.use(handleErrors);
+app.use(workspaceRoutes);
 
 const start = async () => {
   try {
