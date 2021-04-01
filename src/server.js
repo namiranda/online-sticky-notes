@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
-const userRoutes = require('./components/users/user-routes');
+const userRoutes = require('./routes/user-routes');
 const handleErrors = require('./middlewares/error-handler');
 
 const app = express();

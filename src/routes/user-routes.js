@@ -1,12 +1,12 @@
 const router = require('express').Router();
 const { body } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const Password = require('./utils/password');
+const Password = require('../utils/password');
 const currentUser = require('../common/current-user');
-const { BadRequest } = require('../../utils/errors');
-const validateRequest = require('../../middlewares/validate-request');
+const { BadRequest } = require('../utils/errors');
+const validateRequest = require('../middlewares/validate-request');
 
-const User = require('./user-model');
+const User = require('../models/user-model');
 
 router.post(
   '/api/users/signup',
