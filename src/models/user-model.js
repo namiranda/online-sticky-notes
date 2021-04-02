@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const workspaceSchema = require('./workspace-model').schema;
 const Password = require('../utils/password');
 
 const userSchema = new mongoose.Schema(
@@ -7,7 +6,12 @@ const userSchema = new mongoose.Schema(
     username: String,
     email: String,
     password: String,
-    workspaces: [workspaceSchema],
+    workspaces: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Workspace',
+      },
+    ],
   },
   {
     toJSON: {

@@ -1,17 +1,15 @@
 const router = require('express').Router();
-const { body } = require('express-validator');
 const User = require('../models/user-model');
 const Workspace = require('../models/workspace-model');
 
 router.get('/api/workspaces/:user_id', (req, res) => {
-  User.findById(req.params.user_id, (err, foundUser) => {
-    if (err) {
-      console.log(err); //TODO: cambiar esto por un throw error
-    }
-    const workspaces = foundUser.workspaces;
-    console.log(workspaces);
-    res.status(201).send(workspaces);
-  });
+  User.findById(req.params.user_id)
+    .populate('workspaces')
+    .exec(function (err, foundUser) {
+      if (err) return handleError(err);
+      console.log(foundUser.workspaces);
+      res.status(200).send(foundUser.workspaces);
+    });
 });
 
 router.post('/api/workspaces/:user_id', (req, res) => {
@@ -19,9 +17,21 @@ router.post('/api/workspaces/:user_id', (req, res) => {
     if (err) {
       console.log(err); //TODO: cambiar esto por un throw error
     }
-    foundUser.workspaces.push({ name: req.body.name });
+    Workspace.create(
+      {
+        name: req.body.name,
+      },
+      (err, newWorkspace) => {
+        if (err) {
+          console.log(err);
+        } else {
+          newWorkspace.save();
+          foundUser.workspaces.push(newWorkspace);
+          foundUser.save();
+        }
+      }
+    );
 
-    console.log(foundUser.workspaces);
     res.status(201).send('Workspace successfully created');
   });
 });
