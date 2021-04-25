@@ -7,7 +7,12 @@ const workspaceSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  notes: [noteSchema],
+  notes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Note',
+    },
+  ],
 });
 
 module.exports = mongoose.model('Workspace', workspaceSchema);
