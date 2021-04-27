@@ -2,14 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
-const io = require('socket.io');
 const userRoutes = require('./routes/user-routes');
 const workspaceRoutes = require('./routes/workspace-routes');
 const handleErrors = require('./middlewares/error-handler');
 const Note = require('./models/notes-model');
 
 const app = express();
-const http = require('http').Server(app);
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: ['http://localhost:1234'],
+  },
+});
 
 require('dotenv').config();
 app.use(express.json());
@@ -59,21 +63,20 @@ const start = async () => {
     console.log(err);
   }
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Listening on port ${process.env.PORT}...`);
-  });
-
-  const socket = io(http);
-  socket.on('connection', async (client) => {
+  io.on('connection', async (client) => {
     console.log('client connected...');
 
     client.on('message', async (msg) => {
       let note = await Note.Schema.statics.create(msg);
-      socket.emit('message', note);
+      io.emit('message', note);
     });
 
     let latest = await Note.Schema.statics.latest(10);
     client.emit('latest', latest);
+  });
+
+  server.listen(process.env.PORT, () => {
+    console.log(`Listening on port ${process.env.PORT}...`);
   });
 };
 
