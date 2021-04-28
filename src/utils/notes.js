@@ -24,4 +24,15 @@ const createNote = (workspace_id, content) => {
   });
 };
 
-module.exports = createNote;
+const getNotes = async (workspace_id) => {
+  let notes;
+  await Workspace.findById(workspace_id, (err, foundWorkspace) => {
+    if (err) {
+      console.log(err); //TODO: cambiar esto por un throw error
+    }
+    notes = foundWorkspace.notes;
+  });
+  return notes;
+};
+
+module.exports = { createNote, getNotes };

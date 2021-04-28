@@ -5,8 +5,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/user-routes');
 const workspaceRoutes = require('./routes/workspace-routes');
 const handleErrors = require('./middlewares/error-handler');
-const Note = require('./models/notes-model');
-const createNote = require('./utils/notes');
+const { createNote, getNotes } = require('./utils/notes');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -68,11 +67,14 @@ const start = async () => {
     console.log('client connected...');
 
     client.on('message', async (workspace_id, msg) => {
-      let note = await createNote(workspace_id, msg);
+      let note = createNote(workspace_id, msg);
       io.emit('message', note);
     });
-    let latest = await Note.schema.statics.latest(10);
-    client.emit('latest', latest);
+
+    client.on('latest', async (workspace_id) => {
+      let allNotes = await getNotes(workspace_id);
+      io.emit('latest', allNotes);
+    });
   });
 
   server.listen(process.env.PORT, () => {
