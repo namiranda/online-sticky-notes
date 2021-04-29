@@ -25,13 +25,14 @@ const createNote = (workspace_id, content) => {
 };
 
 const getNotes = async (workspace_id) => {
-  let notes;
-  await Workspace.findById(workspace_id, (err, foundWorkspace) => {
-    if (err) {
-      console.log(err); //TODO: cambiar esto por un throw error
-    }
-    notes = foundWorkspace.notes;
-  });
+  let notes = await Workspace.findById(workspace_id)
+    .populate('notes')
+    .then((foundWorkspace) => {
+      return foundWorkspace;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   return notes;
 };
 
