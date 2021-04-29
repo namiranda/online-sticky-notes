@@ -28,7 +28,7 @@ const getNotes = async (workspace_id) => {
   let notes = await Workspace.findById(workspace_id)
     .populate('notes')
     .then((foundWorkspace) => {
-      return foundWorkspace;
+      return foundWorkspace.notes;
     })
     .catch((err) => {
       console.log(err);
