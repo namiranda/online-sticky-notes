@@ -66,14 +66,15 @@ const start = async () => {
   io.on('connection', async (client) => {
     console.log('client connected...');
 
-    client.on('message', async (workspace_id, msg) => {
-      let note = createNote(workspace_id, msg);
-      io.emit('message', note);
+    client.on('new note', async (workspace_id, newNote) => {
+      let note = await createNote(workspace_id, newNote);
+      console.log(note);
+      io.emit('new note', note);
     });
 
-    client.on('latest', async (workspace_id) => {
+    client.on('old notes', async (workspace_id) => {
       let allNotes = await getNotes(workspace_id);
-      io.emit('latest', allNotes);
+      io.emit('old notes', allNotes);
     });
   });
 

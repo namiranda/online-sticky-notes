@@ -1,27 +1,23 @@
 const Note = require('../models/notes-model');
 const Workspace = require('../models/workspace-model');
 
-const createNote = (workspace_id, content) => {
+const createNote = async (workspace_id, content) => {
+  const newNote = new Note({ content: content });
   Workspace.findById(workspace_id, (err, foundWorkspace) => {
     if (err) {
       console.log(err); //TODO: cambiar esto por un throw error
     }
-    Note.create(
-      {
-        content: content,
-      },
-      (err, newNote) => {
-        if (err) {
-          console.log(err);
-        } else {
-          newNote.save();
-          foundWorkspace.notes.push(newNote);
-          foundWorkspace.save();
-          console.log('note created');
-        }
+    newNote.save(function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        foundWorkspace.notes.push(newNote);
+        foundWorkspace.save();
+        console.log('note created');
       }
-    );
+    });
   });
+  return newNote;
 };
 
 const getNotes = async (workspace_id) => {
