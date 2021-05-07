@@ -68,7 +68,6 @@ const start = async () => {
 
     client.on('new note', async (workspace_id, newNote) => {
       let note = await createNote(workspace_id, newNote);
-      console.log(note);
       io.emit('new note', note);
     });
 

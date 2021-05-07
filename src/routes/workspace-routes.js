@@ -9,7 +9,6 @@ router.get('/api/workspaces/:user_id', (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(foundUser.workspaces);
       res.status(200).send(foundUser.workspaces);
     });
 });
