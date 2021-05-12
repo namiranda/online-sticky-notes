@@ -11,7 +11,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
   cors: {
-    origin: ['https://stickytopiks.netlify.app/'],
+    origin: ['https://stickytopiks.netlify.app'],
   },
 });
 
@@ -34,10 +34,7 @@ app.use(
 );
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
-  res.header(
-    'Access-Control-Allow-Origin',
-    'https://stickytopiks.netlify.app/'
-  );
+  res.header('Access-Control-Allow-Origin', req.header('origin'));
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header(
     'Access-Control-Allow-Headers',
