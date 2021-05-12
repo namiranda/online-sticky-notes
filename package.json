@@ -4,13 +4,10 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "server": "nodemon src/index.js",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
     "test": "jest --watchAll",
-    "build": "cd client && npm run build",
-    "install-client": "cd client && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build",
-    "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\""
+    "build": "cd client && npm run build"
   },
   "jest": {
     "testEnvironment": "node",

@@ -51,16 +51,6 @@ app.use(userRoutes);
 app.use(handleErrors);
 app.use(workspaceRoutes);
 
-// Accessing the path module
-const path = require('path');
-
-// Step 1:
-app.use(express.static(path.resolve(__dirname, './client/dist')));
-// Step 2:
-app.get('*', function (request, response) {
-  response.sendFile(path.resolve(__dirname, './client/dist', 'index.html'));
-});
-
 const start = async () => {
   try {
     await mongoose.connect(process.env.DB_TOKEN, {
