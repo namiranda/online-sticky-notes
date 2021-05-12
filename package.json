@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "jest --watchAll",
-    "build": "cd client && npm run build"
+    "test": "jest --watchAll"
   },
   "jest": {
     "testEnvironment": "node",
