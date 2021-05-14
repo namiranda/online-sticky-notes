@@ -55,3 +55,7 @@ Creates a note and add it to the workspace.
 
 Returns an array containing all the notes in the workspace.
   
+  
+  ## Client Side Repo
+  
+  https://github.com/namiranda/sticky-notes-client
