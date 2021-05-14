@@ -31,6 +31,7 @@ app.use(
     signed: false,
     // secure: process.env.NODE_ENV !== 'test',
     secure: false,
+    sameSite: none,
   })
 );
 app.use(function (req, res, next) {
