@@ -12,6 +12,10 @@
 
 **Server:** Node, Express, MongoDB, Socket.io
 
+## Quick Demo
+
+https://stickytopiks.netlify.app/60a028196fdc8538eec14cf1/workspaces/60a02e3d8413970015d30310
+
   
 ## API Reference
 
