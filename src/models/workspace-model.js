@@ -3,6 +3,8 @@ const noteSchema = require('./notes-model').schema;
 
 const workspaceSchema = new mongoose.Schema({
   name: String,
+  date: Date,
+  modified: Date,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

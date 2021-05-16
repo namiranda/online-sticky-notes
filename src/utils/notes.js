@@ -12,6 +12,7 @@ const createNote = async (workspace_id, content) => {
         console.log(err);
       } else {
         foundWorkspace.notes.push(newNote);
+        foundWorkspace.modified = Date.now();
         foundWorkspace.save();
         console.log('note created');
       }

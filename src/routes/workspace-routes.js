@@ -23,6 +23,8 @@ router.post('/api/workspaces/:user_id', (req, res) => {
       {
         name: req.body.name,
         owner: foundUser._id,
+        date: Date.now(),
+        modified: Date.now(),
       },
       (err, newWorkspace) => {
         if (err) {
