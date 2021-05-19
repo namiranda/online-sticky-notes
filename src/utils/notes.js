@@ -33,4 +33,23 @@ const getNotes = async (workspace_id) => {
   return notes;
 };
 
-module.exports = { createNote, getNotes };
+const deleteNote = (workspace_id, note_id) => {
+  Note.findByIdAndRemove(note_id, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      Workspace.findById(workspace_id).exec(function (err, foundWorkspace) {
+        if (err) {
+          console.log(err);
+        } else {
+          //removes the note id from the array in workspace
+          foundWorkspace.notes.pull({ _id: note_id });
+          foundWorkspace.save();
+          console.log('note removed successfully');
+        }
+      });
+    }
+  });
+};
+
+module.exports = { createNote, getNotes, deleteNote };

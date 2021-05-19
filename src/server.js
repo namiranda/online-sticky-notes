@@ -5,7 +5,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/user-routes');
 const workspaceRoutes = require('./routes/workspace-routes');
 const handleErrors = require('./middlewares/error-handler');
-const { createNote, getNotes } = require('./utils/notes');
+const { createNote, getNotes, deleteNote } = require('./utils/notes');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -76,6 +76,11 @@ const start = async () => {
     client.on('old notes', async (workspace_id) => {
       let allNotes = await getNotes(workspace_id);
       io.emit('old notes', allNotes);
+    });
+
+    client.on('delete note', async (workspace_id, note_id) => {
+      deleteNote(workspace_id, note_id);
+      io.emit('delete note', note_id);
     });
   });
 
