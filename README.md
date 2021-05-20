@@ -16,6 +16,7 @@
 
 https://stickytopiks.netlify.app/60a028196fdc8538eec14cf1/workspaces/60a02e3d8413970015d30310
 
+Note: It takes a few seconds for the server to start up, you won't be able to see the notes until then
   
 ## API Reference
 
