@@ -2,7 +2,7 @@ const Note = require('../models/notes-model');
 const Workspace = require('../models/workspace-model');
 
 const createNote = async (workspace_id, content) => {
-  const newNote = new Note({ content: content });
+  const newNote = new Note({ content: content, date: Date.now() });
   Workspace.findById(workspace_id, (err, foundWorkspace) => {
     if (err) {
       console.log(err); //TODO: cambiar esto por un throw error
