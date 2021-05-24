@@ -19,6 +19,8 @@ https://stickytopiks.netlify.app/60a028196fdc8538eec14cf1/workspaces/60a02e3d841
 Open the same link in two different tabs/windows to see ✨ the magic ✨
 
 Note: It takes a few seconds for the server to start up, you won't be able to see the notes until then
+
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/49685356/119281814-8d878e00-bc0d-11eb-9f82-b11ceb9e0cc6.gif)
   
 ## API Reference
 
@@ -61,6 +63,10 @@ Creates a note and add it to the workspace.
 #### getNotes(workspace_id)
 
 Returns an array containing all the notes in the workspace.
+
+#### deleteNote(workspace_id, note_id)
+
+Removes a note from a workspace (and database).
   
   
   ## Client Side Repo
